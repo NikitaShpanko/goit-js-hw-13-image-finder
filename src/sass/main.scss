@@ -1,7 +1,10 @@
-/*
- * Главный файл стилей.
- * Все паршалы подключаются сюда.
- */
+@import './gallery';
 
-// Стили для файла с примером HTML-фрагмента
-// @import './example';
+form {
+  position: fixed;
+  margin: 20px 10px 10px;
+}
+
+input {
+  display: block;
+}

@@ -1,0 +1,33 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 0;
+  margin: 5px;
+
+  img {
+    display: block;
+  }
+}
+
+.photo-card {
+  //   width: 33%;
+  margin: 5px;
+  list-style: none;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 24px;
+}
+
+.stats-item {
+  display: flex;
+  align-items: center;
+
+  i {
+    margin-right: 10px;
+  }
+}

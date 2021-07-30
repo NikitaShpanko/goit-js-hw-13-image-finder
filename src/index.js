@@ -1,8 +1,9 @@
 import './sass/main.scss';
 import config from './config.json';
-import pixabaySearch from './js/pixabaySearch';
-import renderGallery from './js/renderGallery';
-Element.prototype.renderGallery = renderGallery;
+import QuerySel from './js/QuerySel';
+import PixabayGallery from './js/PixabayGallery';
 
-pixabaySearch('ze', 6).then(data => console.log(data));
-//document.querySelector('body').renderGallery('fff');
+const html = new QuerySel('body', '.gallery');
+console.log(html);
+const pixabayGallery = new PixabayGallery(html._gallery, config.pixabay);
+pixabayGallery.updateQuery('ze');
