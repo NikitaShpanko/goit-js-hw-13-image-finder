@@ -12,6 +12,8 @@ export default function (config, ...selectors) {
   if (typeof config === 'string') {
     selectors = [config, ...selectors];
     config = DEFAULT_CONFIG;
+  } else {
+    config = { ...DEFAULT_CONFIG, ...config };
   }
   for (const selector of selectors) {
     this[toCamelCase(selector, config)] = config.parent.querySelector(selector);
