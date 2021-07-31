@@ -4,17 +4,14 @@ export default class InfiniteGallery extends PixabayGallery {
   #observer;
   constructor(parentElem, config) {
     super(parentElem, config);
-    this.#observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.#observer.unobserve(entry.target);
-            this.updateQuery(this.query, this.page + 1, false);
-          }
-        });
-      },
-      //{ root: document /*, threshold: 0.5*/ },
-    );
+    this.#observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.#observer.unobserve(entry.target);
+          this.updateQuery(this.query, this.page + 1, false);
+        }
+      });
+    });
   }
 
   async updateQuery(query, page = 1, clear = true) {
