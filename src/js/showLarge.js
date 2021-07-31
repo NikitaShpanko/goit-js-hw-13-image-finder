@@ -19,7 +19,7 @@ export default function (selector, escapeKeys) {
     instance = basicLightbox.create(modalTpl(e.target.dataset));
     instance.show();
 
-    html = new QuerySel({ parent: instance.element() }, 'img', 'a');
+    html = new QuerySel({ parent: instance.element() }, 'img', 'a', '.modal');
     x = 0;
     y = 0;
 
@@ -41,21 +41,19 @@ export default function (selector, escapeKeys) {
   });
 
   document.addEventListener('mousedown', e => {
-    if (!checkMouse(e)) return;
+    if (!isMoving(e)) return;
     downX = e.screenX;
     downY = e.screenY;
   });
 
   document.addEventListener('mousemove', e => {
-    if (!checkMouse(e)) return;
+    if (!isMoving(e)) return;
     e.preventDefault();
-    x += e.movementX;
-    y += e.movementY;
-    html.a.style.transform = `translate(${x}px,${y}px)`;
+    movePic(e.movementX, e.movementY);
   });
 
   document.addEventListener('touchstart', e => {
-    if (!checkTouch(e)) return;
+    if (!isMoving(e)) return;
     prevX = e.touches[0].screenX;
     prevY = e.touches[0].screenY;
     downX = prevX;
@@ -63,42 +61,49 @@ export default function (selector, escapeKeys) {
   });
 
   document.addEventListener('touchmove', e => {
-    if (!checkTouch(e)) return;
+    if (!isMoving(e)) return;
     e.preventDefault();
     e.stopPropagation();
-    x += e.touches[0].screenX - prevX;
-    y += e.touches[0].screenY - prevY;
+    movePic(
+      e.touches[0].screenX - prevX, //
+      e.touches[0].screenY - prevY,
+    );
     prevX = e.touches[0].screenX;
     prevY = e.touches[0].screenY;
-    html.a.style.transform = `translate(${x}px,${y}px)`;
   });
 
   document.addEventListener('click', e => {
-    if (checkMouse(e, true) || checkTouch(e, true)) {
-      e.preventDefault();
-      e.stopPropagation();
+    if (!basicLightbox.visible()) return;
+    if (e.target === html.img) {
+      if (hasMoved(e)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    } else if (e.target === html.modal) {
+      instance.close();
     }
   });
 
-  function checkMouse(e, click = false) {
-    return (
-      e instanceof MouseEvent &&
-      basicLightbox.visible() &&
-      e.target.tagName === 'IMG' &&
-      (click ? hasMoved(e) : e.buttons === 1)
-    );
+  function movePic(dx, dy) {
+    x += dx;
+    y += dy;
+    html.a.style.transform = `translate(${x}px,${y}px)`;
   }
 
-  function checkTouch(e, click = false) {
-    return (
-      e instanceof TouchEvent &&
-      basicLightbox.visible() &&
-      e.target.tagName === 'IMG' &&
-      (click ? hasMoved(e.touches[0]) : e.touches.length === 1)
-    );
+  function isMoving(e) {
+    return basicLightbox.visible() && //
+      e.target === html.img &&
+      isTouch(e)
+      ? e.touches.length === 1
+      : e.buttons === 1; // left button
   }
 
-  function hasMoved(obj) {
-    return (obj.screenX - downX) ** 2 + (obj.screenY - downY) ** 2 > 1;
+  function hasMoved(e) {
+    e = isTouch(e) ? e.touches[0] : e;
+    return (e.screenX - downX) ** 2 + (e.screenY - downY) ** 2 > 1;
   }
+}
+
+function isTouch(e) {
+  return e instanceof TouchEvent;
 }
