@@ -20,14 +20,16 @@ export default class PixabayGallery {
       const f = await fetch(
         `https://pixabay.com/api/?image_type=photo&orientation=${orientation}&q=${query}&page=${page}&per_page=${per_page}&key=${key}`,
       );
+      if (!f.ok) return false;
       this.#pixResponse = { ...(await f.json()) };
       this.#query = query;
       this.#page = page;
-      this.#pageCount = Math.ceil(this.#pixResponse.totalHits / per_page);
+      this.#pageCount = Math.ceil(this.#pixResponse.total / per_page);
       if (clear) this.clear();
       this.render();
-    } catch (err) {
-      console.warn(err);
+      return true;
+    } catch {
+      return false;
     }
   }
 
@@ -58,5 +60,9 @@ export default class PixabayGallery {
 
   get parent() {
     return this.#parentElem;
+  }
+
+  get foundItemCount() {
+    return this.#pixResponse.total;
   }
 }
