@@ -18,6 +18,7 @@ export default class InfiniteGallery extends PixabayGallery {
   }
 
   async updateQuery(query, page = 1, clear = true) {
+    if (clear) scrollTo(0, 0);
     await super.updateQuery(query, page, clear);
     if (this.page < this.pageCount) {
       this.#observer.observe(this.parent.querySelector('li:last-child'));
