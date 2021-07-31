@@ -1,5 +1,8 @@
 {
-  "key": "22720340-7359735e3dba5a0bd9021ac04",
-  "per_page": 12,
-  "orientation": "horizontal"
+  "pixabay": {
+    "key": "22720340-7359735e3dba5a0bd9021ac04",
+    "per_page": 12,
+    "orientation": "horizontal"
+  },
+  "update_ms": 500
 }
