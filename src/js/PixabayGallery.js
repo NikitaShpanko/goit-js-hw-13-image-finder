@@ -20,15 +20,13 @@ export default class PixabayGallery {
         `https://pixabay.com/api/?image_type=photo&orientation=${orientation}&q=${query}&page=${page}&per_page=${per_page}&key=${key}`,
       );
       this.#pixResponse = await f.json();
+      console.log(this.#pixResponse);
       this.#query = query;
       this.#page = page;
       if (clear) this.clear();
       this.render();
-      //console.log(this.#pixResponse);
-      //return await f.json();
     } catch (err) {
       console.warn(err);
-      //return null;
     }
   }
 

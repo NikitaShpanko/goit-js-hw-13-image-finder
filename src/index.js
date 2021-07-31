@@ -11,4 +11,3 @@ html.form.addEventListener('submit', e => {
   e.preventDefault();
   pixabayGallery.updateQuery(html.input.value);
 });
-// pixabayGallery.updateQuery('ze');

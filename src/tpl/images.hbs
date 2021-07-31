@@ -1,23 +1,23 @@
 {{#each hits}}
-  <li class="photo-card">
-    <img src="{{webformatURL}}" alt="{{tags}}" data-large="{{largeImageURL}}" />
+  <li class='photo-card'>
+    <img src='{{webformatURL}}' alt='{{tags}}' data-large='{{largeImageURL}}' />
 
-    <div class="stats">
-      <p class="stats-item">
-        <i class="material-icons">thumb_up</i>
-        1108
+    <div class='stats'>
+      <p class='stats-item'>
+        <i class='material-icons'>thumb_up</i>
+        {{likes}}
       </p>
-      <p class="stats-item">
-        <i class="material-icons">visibility</i>
-        320321
+      <p class='stats-item'>
+        <i class='material-icons'>visibility</i>
+        {{views}}
       </p>
-      <p class="stats-item">
-        <i class="material-icons">comment</i>
-        129
+      <p class='stats-item'>
+        <i class='material-icons'>comment</i>
+        {{comments}}
       </p>
-      <p class="stats-item">
-        <i class="material-icons">cloud_download</i>
-        176019
+      <p class='stats-item'>
+        <i class='material-icons'>cloud_download</i>
+        {{downloads}}
       </p>
     </div>
   </li>
