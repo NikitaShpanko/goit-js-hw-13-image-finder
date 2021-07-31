@@ -1,8 +1,10 @@
 import * as basicLightbox from 'basiclightbox';
 import modalTpl from '../tpl/modal.hbs';
 
+import QuerySel from './QuerySel';
+
 export default function (selector, escapeKeys) {
-  let instance, img, x, y, downX, downY, prevX, prevY;
+  let instance, html, x, y, downX, downY, prevX, prevY;
 
   selector.addEventListener('click', e => {
     // FOR MOBILE://
@@ -17,7 +19,7 @@ export default function (selector, escapeKeys) {
     instance = basicLightbox.create(modalTpl(e.target.dataset));
     instance.show();
 
-    img = instance.element().querySelector('img');
+    html = new QuerySel({ parent: instance.element() }, 'img', 'a');
     x = 0;
     y = 0;
 
@@ -49,7 +51,7 @@ export default function (selector, escapeKeys) {
     e.preventDefault();
     x += e.movementX;
     y += e.movementY;
-    img.style.transform = `translate(${x}px,${y}px)`;
+    html.a.style.transform = `translate(${x}px,${y}px)`;
   });
 
   document.addEventListener('touchstart', e => {
@@ -68,7 +70,7 @@ export default function (selector, escapeKeys) {
     y += e.touches[0].screenY - prevY;
     prevX = e.touches[0].screenX;
     prevY = e.touches[0].screenY;
-    img.style.transform = `translate(${x}px,${y}px)`;
+    html.a.style.transform = `translate(${x}px,${y}px)`;
   });
 
   document.addEventListener('click', e => {
@@ -84,7 +86,6 @@ export default function (selector, escapeKeys) {
       basicLightbox.visible() &&
       e.target.tagName === 'IMG' &&
       (click ? hasMoved(e) : e.buttons === 1)
-      //(click ? (downX - e.screenX) ** 2 + (downY - e.screenY) ** 2 > 1 : e.buttons === 1)
     );
   }
 
@@ -94,7 +95,6 @@ export default function (selector, escapeKeys) {
       basicLightbox.visible() &&
       e.target.tagName === 'IMG' &&
       (click ? hasMoved(e.touches[0]) : e.touches.length === 1)
-      //? (downX - e.touches[0].screenX) ** 2 + (downY - e.touches[0].screenY) ** 2 > 1
     );
   }
 

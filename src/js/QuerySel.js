@@ -5,6 +5,7 @@ const DEFAULT_CONFIG = {
   '.': '',
   '[': '',
   ']': '',
+  parent: document,
 };
 
 export default function (config, ...selectors) {
@@ -13,7 +14,7 @@ export default function (config, ...selectors) {
     config = DEFAULT_CONFIG;
   }
   for (const selector of selectors) {
-    this[toCamelCase(selector, config)] = document.querySelector(selector);
+    this[toCamelCase(selector, config)] = config.parent.querySelector(selector);
   }
 }
 

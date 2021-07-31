@@ -15,10 +15,11 @@ input {
   width: 100%;
 }
 
-.modal img {
-  display: block;
-}
-
 .modal {
   overflow: hidden;
+
+  img,
+  a {
+    display: block;
+  }
 }
