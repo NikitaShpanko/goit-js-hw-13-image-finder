@@ -3,11 +3,11 @@ import debounce from 'lodash.debounce';
 import './sass/main.scss';
 import config from './config.json';
 import QuerySel from './js/QuerySel';
-import PixabayGallery from './js/PixabayGallery';
+import InfiniteGallery from './js/InfiniteGallery';
 
 const html = new QuerySel('body', 'form', 'input', '.gallery');
 html.body.style.paddingTop = html.form.clientHeight + 'px';
-const pixabayGallery = new PixabayGallery(html.gallery, config.pixabay);
+const pixabayGallery = new InfiniteGallery(html.gallery, config.pixabay);
 
 html.input.addEventListener(
   'input',

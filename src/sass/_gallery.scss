@@ -5,6 +5,8 @@
   padding: 0;
   margin: 5px;
 
+  //min-height: 100%;
+
   img {
     display: block;
   }
@@ -14,6 +16,7 @@
   //   width: 33%;
   margin: 5px;
   list-style: none;
+  min-height: 200px;
 }
 
 .stats {

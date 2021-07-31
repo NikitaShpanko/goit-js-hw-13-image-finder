@@ -24,7 +24,7 @@ export default class PixabayGallery {
       this.#query = query;
       this.#page = page;
       this.#pageCount = Math.ceil(this.#pixResponse.totalHits / per_page);
-      console.log(this.#pageCount);
+      //console.log(this.#pageCount);
       if (clear) this.clear();
       this.render();
     } catch (err) {
@@ -41,6 +41,10 @@ export default class PixabayGallery {
     this.#parentElem.innerHTML = '';
   }
 
+  get query() {
+    return this.#query;
+  }
+
   get page() {
     return this.#page;
   }
@@ -51,5 +55,9 @@ export default class PixabayGallery {
 
   get data() {
     return this.#pixResponse;
+  }
+
+  get parent() {
+    return this.#parentElem;
   }
 }
