@@ -13,6 +13,9 @@ html.input.addEventListener(
   'input',
   debounce(() => {
     pixabayGallery.updateQuery(html.input.value);
+    const url = new URL(location);
+    url.searchParams.set('query', html.input.value);
+    history.pushState(null, null, url);
   }),
   config.update_ms,
 );

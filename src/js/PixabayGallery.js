@@ -19,7 +19,7 @@ export default class PixabayGallery {
       const f = await fetch(
         `https://pixabay.com/api/?image_type=photo&orientation=${orientation}&q=${query}&page=${page}&per_page=${per_page}&key=${key}`,
       );
-      this.#pixResponse = await f.json();
+      this.#pixResponse = { ...(await f.json()) };
       this.#query = query;
       this.#page = page;
       if (clear) this.clear();
