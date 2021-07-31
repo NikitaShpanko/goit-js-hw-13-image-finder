@@ -2,7 +2,7 @@ import * as basicLightbox from 'basiclightbox';
 import modalTpl from '../tpl/modal.hbs';
 
 export default function (selector, escapeKeys) {
-  let instance, img, x, y, down_x, down_y;
+  let instance, img, x, y, downX, downY, prevX, prevY;
 
   selector.addEventListener('click', e => {
     // FOR MOBILE://
@@ -40,8 +40,8 @@ export default function (selector, escapeKeys) {
 
   document.addEventListener('mousedown', e => {
     if (!checkMouse(e)) return;
-    down_x = e.screenX;
-    down_y = e.screenY;
+    downX = e.screenX;
+    downY = e.screenY;
   });
 
   document.addEventListener('mousemove', e => {
@@ -52,22 +52,53 @@ export default function (selector, escapeKeys) {
     img.style.transform = `translate(${x}px,${y}px)`;
   });
 
-  document.addEventListener(
-    'click',
-    e => {
-      if (checkMouse(e, true)) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    },
-    //true,
-  );
+  document.addEventListener('touchstart', e => {
+    if (!checkTouch(e)) return;
+    prevX = e.touches[0].screenX;
+    prevY = e.touches[0].screenY;
+    downX = prevX;
+    downY = prevY;
+  });
+
+  document.addEventListener('touchmove', e => {
+    if (!checkTouch(e)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    x += e.touches[0].screenX - prevX;
+    y += e.touches[0].screenY - prevY;
+    prevX = e.touches[0].screenX;
+    prevY = e.touches[0].screenY;
+    img.style.transform = `translate(${x}px,${y}px)`;
+  });
+
+  document.addEventListener('click', e => {
+    if (checkMouse(e, true) || checkTouch(e, true)) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
 
   function checkMouse(e, click = false) {
     return (
+      e instanceof MouseEvent &&
       basicLightbox.visible() &&
       e.target.tagName === 'IMG' &&
-      (click ? (down_x - e.screenX) ** 2 + (down_y - e.screenY) ** 2 > 1 : e.buttons === 1)
+      (click ? hasMoved(e) : e.buttons === 1)
+      //(click ? (downX - e.screenX) ** 2 + (downY - e.screenY) ** 2 > 1 : e.buttons === 1)
     );
+  }
+
+  function checkTouch(e, click = false) {
+    return (
+      e instanceof TouchEvent &&
+      basicLightbox.visible() &&
+      e.target.tagName === 'IMG' &&
+      (click ? hasMoved(e.touches[0]) : e.touches.length === 1)
+      //? (downX - e.touches[0].screenX) ** 2 + (downY - e.touches[0].screenY) ** 2 > 1
+    );
+  }
+
+  function hasMoved(obj) {
+    return (obj.screenX - downX) ** 2 + (obj.screenY - downY) ** 2 > 1;
   }
 }
