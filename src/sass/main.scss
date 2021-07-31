@@ -2,9 +2,13 @@
 
 form {
   position: fixed;
-  margin: 20px 10px 10px;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 10px 10px;
 }
 
 input {
   display: block;
+  width: 100%;
 }

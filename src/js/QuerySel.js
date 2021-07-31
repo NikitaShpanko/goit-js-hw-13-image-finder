@@ -1,20 +1,30 @@
-export default function (...selectors) {
+const DEFAULT_CONFIG = {
+  '-': 'up',
+  ' ': 'up',
+  '#': '',
+  '.': '',
+  '[': '',
+  ']': '',
+};
+
+export default function (config, ...selectors) {
+  if (typeof config === 'string') {
+    selectors = [config, ...selectors];
+    config = DEFAULT_CONFIG;
+  }
   for (const selector of selectors) {
-    this[toCamelCase(selector)] = document.querySelector(selector);
+    this[toCamelCase(selector, config)] = document.querySelector(selector);
   }
 }
 
-function toCamelCase(string) {
+function toCamelCase(string, config) {
   let isUp = false;
   let newStr = '';
   for (const char of string) {
-    if (char === '-') isUp = true;
-    else if (char === '#' || char === '.' || char === '[' || char === ']') {
-      newStr += '_';
-    } else {
-      newStr += isUp ? char.toUpperCase() : char;
-      isUp = false;
-    }
+    if (config.hasOwnProperty(char)) {
+      if (config[char] === 'up') isUp = true;
+      else newStr += config[char];
+    } else newStr += isUp ? char.toUpperCase() : char;
   }
   return newStr;
 }
