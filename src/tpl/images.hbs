@@ -1,6 +1,8 @@
 {{#each hits}}
   <li class='photo-card'>
-    <img src='{{webformatURL}}' alt='{{tags}}' data-large='{{largeImageURL}}' />
+    <a href='{{largeImageURL}}'>
+      <img src='{{webformatURL}}' alt='{{tags}}' data-large='{{largeImageURL}}' />
+    </a>
 
     <div class='stats'>
       <p class='stats-item'>

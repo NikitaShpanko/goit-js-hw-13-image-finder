@@ -1,9 +1,12 @@
 import debounce from 'lodash.debounce';
+import * as basicLightbox from 'basiclightbox';
+import '../node_modules/basiclightbox/dist/basicLightbox.min.css';
 
 import './sass/main.scss';
 import config from './config.json';
 import QuerySel from './js/QuerySel';
 import InfiniteGallery from './js/InfiniteGallery';
+import modalTpl from './tpl/modal.hbs';
 
 const html = new QuerySel('body', 'form', 'input', '.gallery');
 html.body.style.paddingTop = html.form.clientHeight + 'px';
@@ -19,6 +22,14 @@ html.input.addEventListener(
   }),
   config.update_ms,
 );
+
+html.gallery.addEventListener('click', e => {
+  if (!e.target.tagName === 'IMG') return;
+  e.preventDefault();
+  const instance = basicLightbox.create(modalTpl(e.target.dataset));
+  console.log(modalTpl(e.target.dataset));
+  instance.show();
+});
 
 const startupQuery = new URL(location).searchParams.get('query');
 if (startupQuery) {
