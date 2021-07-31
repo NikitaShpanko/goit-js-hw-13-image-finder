@@ -5,6 +5,7 @@ export default class PixabayGallery {
   #config;
   #query = '';
   #page = 1;
+  #pageCount = 0;
   #pixResponse = {};
 
   constructor(parentElem, config) {
@@ -22,6 +23,8 @@ export default class PixabayGallery {
       this.#pixResponse = { ...(await f.json()) };
       this.#query = query;
       this.#page = page;
+      this.#pageCount = Math.ceil(this.#pixResponse.totalHits / per_page);
+      console.log(this.#pageCount);
       if (clear) this.clear();
       this.render();
     } catch (err) {
@@ -30,11 +33,23 @@ export default class PixabayGallery {
   }
 
   render() {
-    if (!this.#pixResponse?.hits?.length) return;
+    if (this.#page > this.#pageCount) return;
     this.#parentElem.insertAdjacentHTML('beforeend', imagesTpl(this.#pixResponse));
   }
 
   clear() {
     this.#parentElem.innerHTML = '';
+  }
+
+  get page() {
+    return this.#page;
+  }
+
+  get pageCount() {
+    return this.#pageCount;
+  }
+
+  get data() {
+    return this.#pixResponse;
   }
 }
