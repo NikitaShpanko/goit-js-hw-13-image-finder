@@ -37,7 +37,7 @@ html.input.addEventListener(
 );
 
 html.gallery.addEventListener('click', e => {
-  if (!e.target.tagName === 'IMG') return;
+  if (e.target.tagName !== 'IMG') return;
   e.preventDefault();
   const instance = basicLightbox.create(modalTpl(e.target.dataset));
   instance.show();

@@ -17,7 +17,10 @@ export default class InfiniteGallery extends PixabayGallery {
   }
 
   async updateQuery(query, page = 1, clear = true) {
-    if (clear) scrollTo(0, 0);
+    if (clear) {
+      scrollTo(0, 0);
+      this.#observer.disconnect();
+    }
     if (!(await super.updateQuery(query, page, clear))) {
       this.#errHandler();
       return false;
