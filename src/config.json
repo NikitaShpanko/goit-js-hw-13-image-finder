@@ -4,5 +4,6 @@
     "per_page": 12,
     "orientation": "horizontal"
   },
-  "update_ms": 500
+  "update_ms": 500,
+  "escape_keys": ["Escape", "Space", "Enter", "Backspace"]
 }
