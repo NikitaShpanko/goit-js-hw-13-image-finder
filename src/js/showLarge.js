@@ -34,10 +34,19 @@ export default function (selector, config) {
     loaded = false;
     html.img.addEventListener('load', function fn(e) {
       loaded = true;
+      //console.log(html._parent.scrollWidth, html.a.clientWidth);
       movePic(
-        -(config.offsetX ? config.offsetX : 0) * html.a.clientWidth,
-        -(config.offsetY ? config.offsetY : 0) * html.a.clientHeight,
+        html.a.scrollWidth > html._parent.clientWidth
+          ? -(html.a.scrollWidth - html._parent.clientWidth) / 2
+          : 0,
+        html.a.scrollHeight > html._parent.clientHeight
+          ? -(html.a.scrollHeight - html._parent.clientHeight) / 2
+          : 0,
       );
+      //   movePic(
+      //     -(config.offsetX ? config.offsetX : 0) * html.a.clientWidth,
+      //     -(config.offsetY ? config.offsetY : 0) * html.a.clientHeight,
+      //   );
       html.img.removeEventListener('load', fn);
     });
   });
