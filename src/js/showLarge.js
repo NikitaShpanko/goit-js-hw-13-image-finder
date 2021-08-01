@@ -48,6 +48,7 @@ export default function (selector, config) {
 
   document.addEventListener('mousedown', e => {
     if (!isMoving(e)) return;
+    html.a.style.cursor = 'move';
     downX = e.screenX;
     downY = e.screenY;
   });
@@ -55,7 +56,8 @@ export default function (selector, config) {
   document.addEventListener('mousemove', e => {
     if (!isMoving(e)) return;
     e.preventDefault();
-    movePic(e.movementX, e.movementY);
+    const intR = movePic(e.movementX, e.movementY);
+    html.a.style.cursor = intR < config.intersectToClose ? 'not-allowed' : 'move';
   });
 
   document.addEventListener('mouseup', intersectionClose);
@@ -95,6 +97,7 @@ export default function (selector, config) {
   });
 
   window.addEventListener('resize', () => {
+    if (!basicLightbox.visible()) return;
     html.a.style.opacity = 1;
   });
 
@@ -102,16 +105,16 @@ export default function (selector, config) {
     x += dx;
     y += dy;
     html.a.style.transform = `translate(${x}px,${y}px)`;
-    html.a.style.opacity = intersectRatio();
+    return (html.a.style.opacity = intersectRatio());
   }
 
   function isMoving(e) {
-    return basicLightbox.visible() &&
+    return (
+      basicLightbox.visible() &&
       loaded &&
-      e.target === html.img && //
-      isTouch(e)
-      ? e.touches.length === 1
-      : e.buttons === 1; // left button
+      e.target === html.img &&
+      (isTouch(e) ? e.touches.length === 1 : e.buttons === 1)
+    ); // buttons === 1 means left button
   }
 
   function hasMoved(e) {
@@ -140,6 +143,7 @@ export default function (selector, config) {
 
   function intersectionClose() {
     if (!(basicLightbox.visible() && loaded)) return;
+    html.a.style.cursor = 'pointer';
     if (intersectRatio() < config.intersectToClose) {
       instance.close();
     } else {
