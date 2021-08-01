@@ -20,7 +20,7 @@ const pixabayGallery = new InfiniteGallery(html.gallery, config.pixabay, () => {
   error({ text: "Couldn't fetch more images.", delay: 5000 });
 });
 
-showLarge(html.gallery, config.escape_keys);
+showLarge(html.gallery, config.modal);
 
 html.input.addEventListener(
   'input',

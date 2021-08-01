@@ -3,8 +3,16 @@ import modalTpl from '../tpl/modal.hbs';
 
 import QuerySel from './QuerySel';
 
-export default function (selector, escapeKeys) {
-  let instance, html, x, y, downX, downY, prevX, prevY;
+export default function (selector, config) {
+  let instance,
+    html,
+    x,
+    y,
+    downX,
+    downY,
+    prevX,
+    prevY,
+    loaded = false;
 
   selector.addEventListener('click', e => {
     // FOR MOBILE://
@@ -23,18 +31,16 @@ export default function (selector, escapeKeys) {
     x = 0;
     y = 0;
 
-    // console.log(instance.element().getBoundingClientRect());
-    // instance
-    //   .element()
-    //   .querySelector('img')
-    //   .addEventListener('load', e => {
-    //     console.log(e.target.getBoundingClientRect());
-    //   });
+    loaded = false;
+    html.img.addEventListener('load', function fn(e) {
+      loaded = true;
+      html.img.removeEventListener('load', fn);
+    });
   });
 
   document.addEventListener('keydown', e => {
     if (!basicLightbox.visible()) return;
-    if (escapeKeys.includes(e.code)) {
+    if (config.escapeKeys.includes(e.code)) {
       e.preventDefault();
       instance.close();
     }
@@ -51,6 +57,8 @@ export default function (selector, escapeKeys) {
     e.preventDefault();
     movePic(e.movementX, e.movementY);
   });
+
+  document.addEventListener('mouseup', intersectionClose);
 
   document.addEventListener('touchstart', e => {
     if (!isMoving(e)) return;
@@ -72,6 +80,8 @@ export default function (selector, escapeKeys) {
     prevY = e.touches[0].screenY;
   });
 
+  document.addEventListener('touchend', intersectionClose);
+
   document.addEventListener('click', e => {
     if (!basicLightbox.visible()) return;
     if (e.target === html.img) {
@@ -84,15 +94,21 @@ export default function (selector, escapeKeys) {
     }
   });
 
+  window.addEventListener('resize', () => {
+    html.a.style.opacity = 1;
+  });
+
   function movePic(dx, dy) {
     x += dx;
     y += dy;
     html.a.style.transform = `translate(${x}px,${y}px)`;
+    html.a.style.opacity = intersectRatio();
   }
 
   function isMoving(e) {
-    return basicLightbox.visible() && //
-      e.target === html.img &&
+    return basicLightbox.visible() &&
+      loaded &&
+      e.target === html.img && //
       isTouch(e)
       ? e.touches.length === 1
       : e.buttons === 1; // left button
@@ -101,6 +117,34 @@ export default function (selector, escapeKeys) {
   function hasMoved(e) {
     e = isTouch(e) ? e.touches[0] : e;
     return (e.screenX - downX) ** 2 + (e.screenY - downY) ** 2 > 1;
+  }
+
+  function intersectRatio() {
+    const cX = Math.min(html._parent.clientWidth, html.modal.clientWidth);
+    const cY = Math.min(html._parent.clientHeight, html.modal.clientHeight);
+    const sX = html.a.scrollWidth;
+    const sY = html.a.scrollHeight;
+
+    let x1 = x;
+    let y1 = y - (sY - cY) / 2;
+    let x2 = x + sX;
+    let y2 = y + (sY + cY) / 2;
+
+    x1 = x1 > 0 ? x1 : 0;
+    y1 = y1 > 0 ? y1 : 0;
+    x2 = x2 < cX ? x2 : cX;
+    y2 = y2 < cY ? y2 : cY;
+
+    return ((x2 - x1) * (y2 - y1)) / (cX * cY);
+  }
+
+  function intersectionClose() {
+    if (!(basicLightbox.visible() && loaded)) return;
+    if (intersectRatio() < config.intersectToClose) {
+      instance.close();
+    } else {
+      html.a.style.opacity = 1;
+    }
   }
 }
 
