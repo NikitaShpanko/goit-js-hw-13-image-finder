@@ -34,6 +34,10 @@ export default function (selector, config) {
     loaded = false;
     html.img.addEventListener('load', function fn(e) {
       loaded = true;
+      movePic(
+        -(config.offsetX ? config.offsetX : 0) * html.a.clientWidth,
+        -(config.offsetY ? config.offsetY : 0) * html.a.clientHeight,
+      );
       html.img.removeEventListener('load', fn);
     });
   });

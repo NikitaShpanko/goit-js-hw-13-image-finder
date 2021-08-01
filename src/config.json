@@ -6,7 +6,8 @@
   },
   "modal": {
     "escapeKeys": ["Escape", "Space", "Enter", "Backspace"],
-    "intersectToClose": 0.8
+    "intersectToClose": 0.8,
+    "offsetX": 0.33
   },
   "update_ms": 500
 }
